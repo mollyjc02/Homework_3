@@ -43,10 +43,10 @@ final.data.q2 <- final.data %>%
 ### plot the data
 tax.price.plot <- ggplot(final.data.q2 %>% filter(Year >= 1970 & Year <= 2018), aes(x = Year, y = value, color = measure)) +
   geom_line(linewidth = 1) +
-  geom_point(size = 2) +
+  geom_point(size = 0.8, shape = 16, alpha = 0.5) +
   scale_color_manual(values = c("tax_cpi" = "red", "price_cpi" = "blue")) +
   labs(
-    title = "Average Cigarette Tax and Price (1970-2018) Adjusted to 2012 Dollars",
+    title = "Average Cigarette Tax and Price Adjusted to 2012 Dollars",
     x = "Year",
     y = "Value (2012 Dollars)",
     color = "Measure"
@@ -87,7 +87,7 @@ top.5.data <- final.data %>%
 ### plot 
 top.5.plot <- ggplot(top.5.data, aes(x = Year, y = avg_packs_per_capita, color = state)) +
   geom_line(linewidth = 1) +
-  geom_point(size = 2) +
+  geom_point(size = 0.8, shape = 16, alpha = 0.5) +
   labs(
     title = "Average Packs Sold Per Capita (Top 5 States with Highest Price Increase)",
     x = "Year",
@@ -118,7 +118,7 @@ bot.5.data <- final.data %>%
 ### plot 
 bot.5.plot <- ggplot(bot.5.data, aes(x = Year, y = avg_packs_per_capita, color = state)) +
   geom_line(linewidth = 1) +
-  geom_point(size = 2) +
+  geom_point(size = 0.8, shape = 16, alpha = 0.5) +
   labs(
     title = "Average Packs Sold Per Capita (Top 5 States with Lowest Price Increase)",
     x = "Year",
@@ -266,5 +266,5 @@ kable(comparison.table, col.names = c("1970-1990", "1991-2015"),
 
 
 
-rm(list = setdiff(ls(), c("tax.change.plot", "tax.price.plot", "top.5.plot", "bot.5.plot", "comparison.plot", "model.a", "ivs.a", "first.stage.a", "reduced.form.a", "model.b", "ivs.b", "first.stage.b", "reduced.form.b", "comparison.table")))
-save.image("submission_1/hwk3_workspace.RData")
+###rm(list = setdiff(ls(), c("tax.change.plot", "tax.price.plot", "top.5.plot", "bot.5.plot", "comparison.plot", "model.a", "ivs.a", "first.stage.a", "reduced.form.a", "model.b", "ivs.b", "first.stage.b", "reduced.form.b", "comparison.table")))
+###save.image("submission_1/hwk3_workspace.RData")

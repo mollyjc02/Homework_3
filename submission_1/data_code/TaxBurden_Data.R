@@ -8,6 +8,8 @@ cig.data <- read_csv("data/input/The_Tax_Burden_on_Tobacco__1970-2019.csv", col_
 cpi.data <- read_xlsx("data/input/historical-cpi-u-202501.xlsx", skip=3)
 
 
+colnames(cig.data)
+
 
 # Clean Tobacco Data 
 cig.data <- cig.data %>%
@@ -43,6 +45,9 @@ cpi.data <- cpi.data %>% filter(!is.na(Year))
 cpi.data <- cpi.data %>% filter(Year != "2025")
 
 ### pivot and average by year
+month_columns <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+cpi.data[, month_columns] <- lapply(cpi.data[, month_columns], function(x) as.numeric(as.character(x)))
+
 cpi.data <- pivot_longer(cpi.data, 
                          cols=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"),
                          names_to="month",
