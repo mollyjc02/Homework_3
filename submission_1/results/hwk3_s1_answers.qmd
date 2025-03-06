@@ -104,15 +104,10 @@ print(comparison.plot)
 #| echo: false
 #| label: model.a
 
-install.packages("broom", repos = "https://cloud.r-project.org/")
 library(broom)
 
-# format output as a table
-model.a.results <- tidy(model.a, conf.int = TRUE)
-
-# display results in a table
-knitr::kable(model.a.results, digits = 3, caption = "Regression Results: Log Sales on Log Price")
-
+model.a.summary <- summary(model.a)
+model.a.summary
 ```
 
 
@@ -124,11 +119,8 @@ knitr::kable(model.a.results, digits = 3, caption = "Regression Results: Log Sal
 #| echo: false
 #| label: ivs.a
 
-# format output as a table
-ivs.a.results <- tidy(ivs.a, conf.int = TRUE)
-
-# display results in a table
-knitr::kable(model.a.results, digits = 3, caption = "Regression Results: Log Sales on Log Price Using Total Cigarette Price")
+ivs.a.summary <- summary(ivs.a)
+ivs.a.summary
 ```
 
 
@@ -138,20 +130,13 @@ knitr::kable(model.a.results, digits = 3, caption = "Regression Results: Log Sal
 
 ```{r} 
 #| echo: false
-#| label: first.stage & reduced.form a
+#| label: first.stage.and.reduced.form-a
 
-# convert models to tidy data frames
-first.stage.results.a <- tidy(first.stage.a, conf.int = TRUE)
-reduced.form.results.a <- tidy(reduced.form.a, conf.int = TRUE)
+fs.summary.a <- summary(first.stage.a)
+fs.summary.a
 
-# format tables
-first.stage.results.a %>%
-  kable(digits = 3, caption = "First Stage Regression: Effect of Log Total Tax on Log Price") %>%
-  kable_styling()
-
-reduced.form.results.a %>%
-  kable(digits = 3, caption = "Reduced Form Regression: Effect of Log Total Tax on Log Sales") %>%
-  kable_styling()
+rf.summary.a <- summary(reduced.form.a)
+rf.summary.a
 ```
 
 
@@ -165,12 +150,8 @@ reduced.form.results.a %>%
 #| echo: false
 #| label: model.b
 
-# Format output as a table
-model.b.results <- tidy(model.b, conf.int = TRUE)
-
-# Display results in a table
-knitr::kable(model.b.results, digits = 3, caption = "Regression Results: Log Sales on Log Price")
-
+model.b.summary <- summary(model.b)
+model.b.summary
 ```
 
 
@@ -182,11 +163,8 @@ knitr::kable(model.b.results, digits = 3, caption = "Regression Results: Log Sal
 #| echo: false
 #| label: ivs.b
 
-# Format output as a table
-ivs.b.results <- tidy(ivs.b, conf.int = TRUE)
-
-# Display results in a table
-knitr::kable(model.b.results, digits = 3, caption = "Regression Results: Log Sales on Log Price Using Total Cigarette Price")
+ivs.b.summary <- summary(ivs.b)
+ivs.b.summary
 ```
 
 
@@ -196,20 +174,13 @@ knitr::kable(model.b.results, digits = 3, caption = "Regression Results: Log Sal
 
 ```{r} 
 #| echo: false
-#| label: first.stage & reduced.form b
+#| label: first.stage.and.reduced.form-b
 
-# convert models to tidy data frames
-first.stage.results.b <- tidy(first.stage.b, conf.int = TRUE)
-reduced.form.results.b <- tidy(reduced.form.b, conf.int = TRUE)
+fs.summary.b <- summary(first.stage.b)
+fs.summary.b
 
-# format tables
-first.stage.results.b %>%
-  kable(digits = 3, caption = "First Stage Regression: Effect of Log Total Tax on Log Price") %>%
-  kable_styling()
-
-reduced.form.results.b %>%
-  kable(digits = 3, caption = "Reduced Form Regression: Effect of Log Total Tax on Log Sales") %>%
-  kable_styling()
+rf.summary.b <- summary(reduced.form.b)
+rf.summary.b
 ```
 
 
