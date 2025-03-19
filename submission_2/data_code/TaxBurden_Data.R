@@ -47,30 +47,7 @@ cpi.data <- pivot_longer(cpi.data,
 cpi.data <- cpi.data %>%
   group_by(Year) %>%
   summarize(index=mean(index, na.rm=TRUE))
-
-
-
-
-
-### remove "." from column names 
-######## colnames(cpi.data) <- gsub("\\.", "", colnames(cpi.data))
-
-### remove first row (empty) and 2025 (only has a value for January) 
-######## cpi.data <- cpi.data %>% filter(!is.na(Year)) 
-######## cpi.data <- cpi.data %>% filter(Year != "2025")
-
-### pivot and average by year
-######## month_columns <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
-######## cpi.data[, month_columns] <- lapply(cpi.data[, month_columns], function(x) as.numeric(as.character(x)))
-
-######## cpi.data <- pivot_longer(cpi.data, 
-########                         cols=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"),
-########                         names_to="month",
-########                         values_to="index")
-########cpi.data <- cpi.data %>%
-########  group_by(Year) %>%
-########  summarize(index=mean(index, na.rm=TRUE)) 
-
+  
 
 
 # Form Final Dataset 

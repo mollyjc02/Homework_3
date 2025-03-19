@@ -29,8 +29,8 @@ Here is a link to my repository: {https://github.com/mollyjc02/Homework_3.git}
 #| include: false
 #| eval: true
 
-setwd("C:/Users/Molly/OneDrive - Emory University/Documents/GitHub/Homework_3/submission_2")
-load("hwk3_workspace.RData")
+library(here)
+load(here("submission_2", "results", "hwk3_workspace.RData"))
 ```
 
 
@@ -86,6 +86,9 @@ print(bot.5.plot)
 
 ## 5. Compare the trends in sales from the 5 states with the highest price increases to those with the lowest price increases.
 
+As seen in @comparison.plot, there is a much larger decrease in cigarette sales, as measured by average packs sold per year per capita, among the top 5 states with the highest price increases compared to the 5 states with the lowest price increases.
+
+
 ```{r} 
 #| echo: false
 #| label: comparison.plot
@@ -104,11 +107,10 @@ print(comparison.plot)
 #| echo: false
 #| label: model.a
 
-library(broom)
-
-model.a.summary <- summary(model.a)
-model.a.summary
+coef(model.a)
 ```
+
+The coefficient of -0.809 implies relatively inelastic demand. Essentially, consumers are less responsive to changes in price, which is logical considering that cigarettes are addictive goods.
 
 
 \newpage 
@@ -119,9 +121,10 @@ model.a.summary
 #| echo: false
 #| label: ivs.a
 
-ivs.a.summary <- summary(ivs.a)
-ivs.a.summary
+coef(ivs.a)
 ```
+
+Using an instrumental variable, the coefficient on log price is similar but of lesser magnitude (-0.809 vs -0.796). This difference is likely due to a correction for endogeneity. By using the tax as an instrument, this regression addresses reverse causality and omitted variable bias, both of which could have inflated the OLS estimate.
 
 
 \newpage 
@@ -132,11 +135,9 @@ ivs.a.summary
 #| echo: false
 #| label: first.stage.and.reduced.form-a
 
-fs.summary.a <- summary(first.stage.a)
-fs.summary.a
+coef(first.stage.a)
 
-rf.summary.a <- summary(reduced.form.a)
-rf.summary.a
+coef(reduced.form.a)
 ```
 
 
@@ -150,9 +151,10 @@ rf.summary.a
 #| echo: false
 #| label: model.b
 
-model.b.summary <- summary(model.b)
-model.b.summary
+coef(model.b)
 ```
+
+The coefficient of -1 implies that the demand for cigarettes is unitary elastic. Essentially, for every 1% change in price, there is an associated 1% change in quantity demanded. In comparison to the 1970-1990 period, this relative increase in price elasticity may reflect a growing awareness among consumers about the negative health effects of smoking, making them more responsive to price changes.
 
 
 \newpage 
@@ -163,9 +165,10 @@ model.b.summary
 #| echo: false
 #| label: ivs.b
 
-ivs.b.summary <- summary(ivs.b)
-ivs.b.summary
+coef(ivs.b)
 ```
+
+Using an instrumental variable, the coefficient on log price is similar but of greater magnitude (-1.000 vs -1.150). This difference suggests that the OLS estimate may have underestimated price elasticity due to endogeneity. By using the tax as an instrument, the IV regression addresses potential issues like reverse causality and omitted variable bias, which may have caused the OLS estimate to be biased toward zero. The IV estimate provides a more accurate measure of price elasticity by isolating the exogenous variation in price.
 
 
 \newpage 
@@ -176,11 +179,9 @@ ivs.b.summary
 #| echo: false
 #| label: first.stage.and.reduced.form-b
 
-fs.summary.b <- summary(first.stage.b)
-fs.summary.b
+coef(first.stage.b)
 
-rf.summary.b <- summary(reduced.form.b)
-rf.summary.b
+coef(reduced.form.b)
 ```
 
 
@@ -190,10 +191,6 @@ rf.summary.b
 
 ```{r} 
 #| echo: false
-#| label: comparison. table 
+#| label: comparison.table 
 
-rownames(comparison.table) <- "Slope Estimate"
-kable(comparison.table, col.names = c("1970-1990", "1991-2015"), 
-      caption = "Comparison of Slope Estimates for 1970-1990 and 1991-2015", 
-      format = "markdown", align = "c")
 ```

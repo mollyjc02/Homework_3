@@ -20,7 +20,7 @@ tax.change.proportion <- final.data.q1 %>%
 ### plot the bar graph
 tax.change.plot <- ggplot(tax.change.proportion, aes(x = Year, y = proportion_change)) +
   geom_bar(stat = "identity", fill = "steelblue") +
-  labs(title = "Proportion of States with Cigarette Tax Changes (1970-1985)",
+  labs(title = "Proportion of States with Cigarette Tax Changes",
        x = "Year",
        y = "Proportion of States") +
   theme_minimal()
@@ -28,12 +28,10 @@ print(tax.change.plot)
 
 
 # 2. Plot on a single graph the average tax (in 2012 dollars) on cigarettes and the average price of a pack of cigarettes from 1970 to 2018.
-cpi_2012 <- cpi.data %>% filter(Year == 2012) %>% pull(index)
-
 ### adjust taxes to 2012 values 
 final.data <- final.data %>%
-  mutate(price_real = cost_per_pack * (cpi_2012/index),
-         tax_real = tax_dollar * (cpi_2012/index))
+  mutate(price_real = cost_per_pack * (230/index),
+         tax_real = tax_dollar * (230/index))
 
 ### plot the data
 tax.plot <- final.data %>%
@@ -43,11 +41,11 @@ tax.plot <- final.data %>%
             avg_price = mean(price_real, na.rm = TRUE))
 
 tax.price.plot <- ggplot(tax.plot, aes(x = Year)) +
-  geom_line(aes(y = avg_tax, color = "Average Tax (2012$)"), size = 1.2) +
-  geom_line(aes(y = avg_price, color = "Average Price (2012$)"), size = 1.2) +
-  labs(title = "Average Tax and Price of Cigarettes (1970-2018, Adjusted to 2012$)",
+  geom_line(aes(y = avg_tax, color = "Average Tax"), size = 1.2) +
+  geom_line(aes(y = avg_price, color = "Average Price"), size = 1.2) +
+  labs(title = "Average Tax and Price of Cigarettes (in 2012 dollars)",
        x = "Year",
-       y = "Dollars (2012 Adjusted)",
+       y = "Price",
        color = "Legend") +
   theme_minimal()
 
@@ -61,8 +59,8 @@ final.data <- final.data %>%
 
 ### calculate price difference 
 final.data.q3 <- final.data %>% 
-  filter(Year == 1970) %>% select(state, price_1970=price_cpi) %>%
-  left_join(final.data %>%  filter(Year == 2018) %>% select(state, price_2018=price_cpi), by=c("state")) %>% 
+  filter(Year == 1970) %>% select(state, price_1970=price_real) %>% #### price_real vs price_cpi!!!
+  left_join(final.data %>%  filter(Year == 2018) %>% select(state, price_2018=price_real), by=c("state")) %>% 
   mutate(price_change=price_2018-price_1970)
 
 high.change <- final.data.q3 %>% slice_max(price_change, n=5) %>% mutate (change_group = "high")
@@ -78,7 +76,7 @@ inner_join(change.group %>% select(state, change_group),
 top.5.plot <- top.bottom.price %>% filter(change_group=="high") %>% 
   ggplot(aes(x = Year, y = sales_per_capita, color = state)) +
   stat_summary(fun="mean", geom="line") +
-  labs(title = "Average Packs Sold Per Capita (1970-2018)",
+  labs(title = "Cigarette Sales Per Capita",
        subtitle = "For the 5 States with the Highest Increase in Cigarette Prices",
        x = "Year",
        y = "Packs Sold Per Capita",
@@ -92,8 +90,8 @@ print(top.5.plot)
 bot.5.plot <- top.bottom.price %>% filter(change_group=="low") %>% 
   ggplot(aes(x = Year, y = sales_per_capita, color = state)) +
   stat_summary(fun="mean", geom="line") +
-  labs(title = "Average Packs Sold Per Capita (1970-2018)",
-       subtitle = "For the 5 States with the Highest Increase in Cigarette Prices",
+  labs(title = "Cigarette Sales Per Capita",
+       subtitle = "For the 5 States with the Lowest Increase in Cigarette Prices",
        x = "Year",
        y = "Packs Sold Per Capita",
        color = "State") +
@@ -125,7 +123,8 @@ comparison.plot <- ggplot(final.data.q4, aes(x = Year)) +
   geom_line(aes(y = avg_packs_top5, color = "Top 5 Price Increase"), linewidth = 1.2) +
   geom_line(aes(y = avg_packs_bot5, color = "Bottom 5 Price Increase"), linewidth = 1.2) +
   labs(
-    title = "Comparison of Cigarette Sales in States with High vs. Low Price Increases",
+    title = "Comparison of Cigarette Sales",
+    subtitle = "For States with Highest vs. Lowest Increases in Cigarette Prices",
     x = "Year",
     y = "Average Packs Sold Per Capita",
     color = "Group"
@@ -145,7 +144,7 @@ final.data.70.90 <- final.data %>%
 ### create log transformed variables
 final.data.70.90 <- final.data.70.90 %>%
   mutate(log_sales = log(sales_per_capita), 
-         log_price = log(price_cpi)) 
+         log_price = log(price_real)) 
 
 ### run the regression 
 model.a <- lm(log_sales ~ log_price, data = final.data.70.90)
@@ -156,14 +155,13 @@ summary(model.a)
 ### create log transformations 
 final.data.70.90 <- final.data.70.90 %>%
   mutate(log_sales = log(sales_per_capita),
-         log_price = log(price_cpi),
-         log_total_tax = log(tax_dollar))
+         log_price = log(price_real),
+         log_total_tax = log(tax_real))
 
 ### run regression using feols 
 library(fixest)
 ivs.a <- feols(log_sales ~ 1 | log_price ~ log_total_tax, data = final.data.70.90)
 summary(ivs.a)
-
 
 
 # 8a. Show the first stage and reduced-form results from the instrument.
@@ -187,7 +185,7 @@ final.data.91.15 <- final.data %>%
 ### create log transformed variables
 final.data.91.15 <- final.data.91.15 %>%
   mutate(log_sales = log(sales_per_capita), 
-         log_price = log(price_cpi)) 
+         log_price = log(price_real)) 
 
 ### run the regression 
 model.b <- lm(log_sales ~ log_price, data = final.data.91.15)
@@ -199,11 +197,10 @@ summary(model.b)
 ### create log transformations 
 final.data.91.15 <- final.data.91.15 %>%
   mutate(log_sales = log(sales_per_capita),
-         log_price = log(price_cpi),
-         log_total_tax = log(tax_dollar))
+         log_price = log(price_real),
+         log_total_tax =log (tax_real))
 
 ### run regression using feols 
-library(fixest)
 ivs.b <- feols(log_sales ~ 1 | log_price ~ log_total_tax, data = final.data.91.15)
 summary(ivs.b)
 
@@ -221,21 +218,7 @@ summary(reduced.form.b)
 
 
 # 10. Table comparing estimates 
-coef.a <- coef(ivs.a)
-coef.b <- coef(ivs.b)  
-
-comparison.table <- data.frame(
-  "1970-1990" = coef.a["fit_log_price"],
-  "1991-2015" = coef.b["fit_log_price"])
-
-### create a nice table 
-library(knitr)
-rownames(comparison.table) <- "Slope Estimate"
-kable(comparison.table, col.names = c("1970-1990", "1991-2015"), 
-      caption = "Comparison of Slope Estimates for 1970-1990 and 1991-2015", 
-      format = "markdown", align = "c")
 
 
-
-rm(list = setdiff(ls(), c("tax.change.plot", "tax.price.plot", "top.5.plot", "bot.5.plot", "comparison.plot", "model.a", "ivs.a", "first.stage.a", "reduced.form.a", "model.b", "ivs.b", "first.stage.b", "reduced.form.b", "comparison.table")))
-save.image("submission_2/hwk3_workspace.RData")
+rm(list = setdiff(ls(), c("tax.change.plot", "tax.price.plot", "top.5.plot", "bot.5.plot", "comparison.plot", "model.a", "ivs.a", "first.stage.a", "reduced.form.a", "model.b", "ivs.b", "first.stage.b", "reduced.form.b")))
+save.image("submission_2/results/hwk3_workspace.RData")
