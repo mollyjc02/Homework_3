@@ -51,7 +51,7 @@ cpi.data <- cpi.data %>%
 
 
 # Form Final Dataset 
-### adjust to 2012 
+### adjust to 2010 
 final.cig.data <- final.cig.data %>%
   mutate(Year = as.integer(Year))
 
@@ -59,8 +59,7 @@ cpi.data <- cpi.data %>%
   mutate(Year = as.integer(Year))
 
 final.data <- final.cig.data %>%
-  left_join(cpi.data, by="Year") %>%
-  mutate(price_cpi=cost_per_pack*(218/index))
+  left_join(cpi.data, by="Year") 
 
 write_tsv(final.data,"data/output/TaxBurden_Data.txt",append=FALSE,col_names=TRUE)
 write_rds(final.data,"data/output/TaxBurden_Data.rds")
