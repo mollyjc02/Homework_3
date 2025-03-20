@@ -42,10 +42,15 @@ tax.plot <- final.data %>%
 tax.price.plot <- ggplot(tax.plot, aes(x = Year)) +
   geom_line(aes(y = avg_tax, color = "Average Tax"), size = 1.2) +
   geom_line(aes(y = avg_price, color = "Average Price"), size = 1.2) +
-  labs(x = "Year",
-       y = "Price",
-       color = "Legend") +
-  theme_minimal()
+  geom_text(data = tax.plot %>% filter(Year == 2018), 
+            aes(x = Year - 10, y = avg_tax + 0.2, label = "Average Tax"), 
+            hjust = 0, color = "black") +
+  geom_text(data = tax.plot %>% filter(Year == 2018), 
+            aes(x = Year - 10, y = avg_price + 0.2, label = "Average Price"), 
+            hjust = 0, color = "black") +
+  labs(x = "Year", y = "Price") +
+  theme_minimal() +
+  theme(legend.position = "none")
 
 print(tax.price.plot)
 
@@ -97,7 +102,7 @@ print(bot.5.plot)
 
 # 5. Compare the trends in sales from the 5 states with the highest price increases to those with the lowest price increases.
 comparison.plot <- top.bottom.price %>% 
-  ggplot(aes(x = Year, y=sales_per_capita, linetype=change_group)) + 
+  ggplot(aes(x = Year, y=sales_per_capita, color=change_group)) + 
   stat_summary(fun="mean", geom="line") + 
   labs(x = "Year",
        y = "Average Packs Sold Per Capita",
@@ -105,10 +110,11 @@ comparison.plot <- top.bottom.price %>%
   ) + 
   geom_text(data=top.bottom.price %>% group_by(Year, change_group) %>% 
             summarise(mean_sales=mean(sales_per_capita, na.rm=TRUE)) %>% 
-            filter(Year==2016), 
-            aes(label=c("High Price Change", "Low Price Change"), 
-            x=Year-3, 
-            y=mean_sales-5)) +
+            filter(Year==2015), 
+            aes(label=c("High Increases", "Low Increases"), 
+            x=Year-4, 
+            y=mean_sales-5), 
+            color = "black") +
   theme_minimal() +
   theme(legend.position = "none") 
 print(comparison.plot)
@@ -166,5 +172,5 @@ reduced.form.b <- feols(log_sales ~ log_total_tax, data = final.data %>% filter(
 
 
 
-###rm(list = setdiff(ls(), c("tax.change.plot", "tax.price.plot", "top.5.plot", "bot.5.plot", "comparison.plot", "ols.a", "ivs.a", "first.stage.a", "reduced.form.a", "ols.b", "ivs.b", "first.stage.b", "reduced.form.b")))
-save.image("submission_3/results/hwk3_workspace.RData")
+rm(list = setdiff(ls(), c("tax.change.plot", "tax.price.plot", "top.5.plot", "bot.5.plot", "comparison.plot", "ols.a", "ivs.a", "first.stage.a", "reduced.form.a", "ols.b", "ivs.b", "first.stage.b", "reduced.form.b")))
+save.image("final_submission/results/hwk3_workspace.RData")

@@ -30,7 +30,7 @@ Here is a link to my repository: {https://github.com/mollyjc02/Homework_3.git}
 #| eval: true
 
 library(here)
-load(here("submission_3", "results", "hwk3_workspace.RData"))
+load(here("final_submission", "results", "hwk3_workspace.RData"))
 ```
 
 
@@ -67,8 +67,7 @@ print(tax.price.plot)
 ```{r} 
 #| echo: false
 #| label: fig-top5 
-#| fig-cap: "Cigarette Sales Per Capita"
-#| fig-subcap: "5 States with Highest Increase in Cigarette Prices"
+#| fig-cap: "Cigarette Sales Per Capita (5 States with Highest Price Increase)"
 
 print(top.5.plot)
 ```
@@ -81,8 +80,7 @@ print(top.5.plot)
 ```{r} 
 #| echo: false
 #| label: fig-bot5
-#| fig-cap: "Cigarette Sales Per Capita"
-#| fig-subcap: "5 States with  Lowest Increase in Cigarette Prices"
+#| fig-cap: "Cigarette Sales Per Capita (5 States with Lowest Price Increase)" 
 
 print(bot.5.plot)
 ```
@@ -98,8 +96,7 @@ As seen in @fig-compplot, there is a much larger decrease in cigarette sales, as
 ```{r} 
 #| echo: false
 #| label: fig-compplot 
-#| fig-cap: "Comparison of Cigarette Sales" 
-#| fig-subcap: "For States with Highest vs. Lowest Increases in Cigarette Prices"
+#| fig-cap: "Comparison of Cigarette Sales (States with Highest vs Lowest Price Increase)" 
 
 print(comparison.plot)
 ```
@@ -130,7 +127,7 @@ modelsummary(list("Estimates"=list("OLS"=ols.a, "IV"=ivs.a, "OLS"=ols.b, "IV"=iv
     add_header_above(c(" "=1, "1970-1990"=2, "1991-2015"=2)) %>% 
     kable_styling(latex_options = "hold_position")
 
-
+###table_output
 ```
 
 
@@ -139,30 +136,37 @@ modelsummary(list("Estimates"=list("OLS"=ols.a, "IV"=ivs.a, "OLS"=ols.b, "IV"=iv
 
 
 ## 6a. Focusing only on the time period from 1970 to 1990, regress log sales on log prices to estimate the price elasticity of demand over that period. Interpret your results.
-The coefficient corresponding to the OLS estimate from this time period (1970-1990) of -0.809 (see table @tab-coef) implies a relatively inelastic demand. Essentially, the quantity cigarettes demanded by consumers is relatively less responsive to changes in price. This observation is logical considering that cigarettes are addictive goods.
+The coefficient corresponding to the OLS estimate from the time period of 1970-1990 is -0.809, which implies a relatively inelastic demand (see Table 1). Essentially, the quantity cigarettes demanded by consumers is relatively less responsive to changes in price. This observation is logical considering that cigarettes are addictive goods.
 
 
 ## 7a. Regress log sales on log prices using the total (federal and state) cigarette tax (in dollars) as an instrument for log prices. Interpret your results and compare your estimates to those without an instrument. Are they different? If so, why?
-Using an instrumental variable, the coefficient corresponding to the IV estimate from this time period (1970-1990)  is similar but of lesser magnitude (-0.809 vs -0.796) than that recovered using OLS (see table @tab-coef). This difference is likely due to a correction for endogeneity when using an instrumental variable. By using the tax as an instrument, this regression addresses reverse causality and omitted variable bias, both of which could have inflated the OLS estimate.
+Using an instrumental variable, the coefficient corresponding to the IV estimate from this time period (1970-1990)  is similar but of lesser magnitude (-0.809 vs -0.796) than that recovered using OLS (see Table 1). This difference is likely due to a correction for endogeneity when using an instrumental variable. By using the tax as an instrument, this regression addresses reverse causality and omitted variable bias, both of which could have inflated the OLS estimate.
 
 
 ## 8a. Show the first stage and reduced-form results from the instrument.
- In order to assess the strength of a instrument, the F-statistic should have a magnitude greater than 10 (a general rule of thumb for checking whether the instrument is strong enough to avoid weak instrument bias). This can be obtained by dividing the coefficient of the first stage by its standard error and squaring the quotient. In the context of the above elasticity estimates (see table @tab-coef),  the F-statistic associated with the first stage in 1970-1990 (~469) is of substantially greater magnitude than 10. This finding supports the strength and validity of the instrument. 
+ In order to assess the strength of a instrument, the F-statistic should have a magnitude greater than 10 (a general rule of thumb for checking whether the instrument is strong enough to avoid weak instrument bias). This can be obtained by dividing the coefficient of the first stage by its standard error and squaring the quotient. In the context of the above elasticity estimates (see Table 1), the F-statistic associated with the first stage in 1970-1990 (~469) is of substantially greater magnitude than 10. This finding supports the strength and validity of the instrument. 
+
+
+\newpage 
 
 
 
 # Repeat the above three questions for the time period of  1991-2015 (question 9) 
 
 ## 6b.
-The coefficient corresponding to the OLS estimate from this time period (1991-2015) of -1 (see table @tab-coef) implies a unitary elasticity of demand. Essentially, for every 1% increase in price, there is an associated 1% decrease in quantity demanded. In comparison to the 1970-1990 period, this relative increase in price elasticity may reflect a growing awareness among consumers about the negative health effects of smoking, making them more responsive to price changes.
+The coefficient corresponding to the OLS estimate from this time period (1991-2015) of -1 (see Table 1) implies a unitary elasticity of demand. Essentially, for every 1% increase in price, there is an associated 1% decrease in quantity demanded. In comparison to the 1970-1990 period, this relative increase in price elasticity may reflect a growing awareness among consumers about the negative health effects of smoking, making them more responsive to price changes.
 
 
 ## 7b. 
-Using an instrumental variable, the coefficient corresponding to the IV estimate from this time period (1991-2015)  is similar but of greater magnitude (-1.000 vs -1.150) than that recovered using OLS (see table @tab-coef). This difference suggests that the OLS estimate may have underestimated price elasticity due to endogeneity. By using the tax as an instrument, the IV regression addresses potential issues like reverse causality and omitted variable bias, which may have caused the OLS estimate to be biased toward zero. IV isolates the exogenous variation in price, which can give a more accurate estimate of the elasticity.
+Using an instrumental variable, the coefficient corresponding to the IV estimate from this time period (1991-2015)  is similar but of greater magnitude (-1.000 vs -1.150) than that recovered using OLS (see Table 1). This difference suggests that the OLS estimate may have underestimated price elasticity due to endogeneity. By using the tax as an instrument, the IV regression addresses potential issues like reverse causality and omitted variable bias, which may have caused the OLS estimate to be biased toward zero. IV isolates the exogenous variation in price, which can give a more accurate estimate of the elasticity.
 
 
 ## 8b. 
- In order to assess the strength of a instrument, the F-statistic should have a magnitude greater than 10 (a general rule of thumb for checking whether the instrument is strong enough to avoid weak instrument bias). This can be obtained by dividing the coefficient of the first stage by its standard error and squaring the quotient. In the context of the above elasticity estimates (see table @tab-coef), the F-statistic associated with the first stage in 1991-2015 (~5,391) is of substantially greater magnitude than 10. This finding supports the strength and validity of the instrument. 
+ In order to assess the strength of a instrument, the F-statistic should have a magnitude greater than 10 (a general rule of thumb for checking whether the instrument is strong enough to avoid weak instrument bias). This can be obtained by dividing the coefficient of the first stage by its standard error and squaring the quotient. In the context of the above elasticity estimates (see Table 1), the F-statistic associated with the first stage in 1991-2015 (~5,391) is of substantially greater magnitude than 10. This finding supports the strength and validity of the instrument. 
+
+
+\newpage 
+
 
 
 ## 10. Compare your elasticity estimates from 1970-1990 versus those from 1991-2015. Are they different? If so, why? 
