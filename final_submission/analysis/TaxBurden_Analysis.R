@@ -50,7 +50,8 @@ tax.price.plot <- ggplot(tax.plot, aes(x = Year)) +
             hjust = 0, color = "black") +
   labs(x = "Year", y = "Price") +
   theme_minimal() +
-  theme(legend.position = "none")
+  theme(legend.position = "none") +
+  scale_x_continuous(limits = c(1970, 2020), expand = c(0.02, 0.02))  # extends x-axis to include 2020 so it isn't cut off
 
 print(tax.price.plot)
 
@@ -83,7 +84,6 @@ top.5.plot <- top.bottom.price %>% filter(change_group=="high") %>%
        y = "Packs Sold Per Capita",
        color = "State") +
   theme_minimal()
-
 print(top.5.plot)
 
 
@@ -95,7 +95,6 @@ bot.5.plot <- top.bottom.price %>% filter(change_group=="low") %>%
        y = "Packs Sold Per Capita",
        color = "State") +
   theme_minimal()
-
 print(bot.5.plot)
 
 
@@ -150,10 +149,6 @@ reduced.form.a <- feols(log_sales ~ log_total_tax, data = final.data %>% filter(
 
 
 #### 1991-2015 
-final.data.91.15 <- final.data %>%
-  filter(Year >= 1991 & Year <= 2015)
-
-
 # 6b. Regress log sales on log prices to estimate the price elasticity of demand over that period.
 ols.b <- feols(log_sales ~ log_price, data = final.data %>% filter(Year >= 1991 & Year <= 2015))
 
